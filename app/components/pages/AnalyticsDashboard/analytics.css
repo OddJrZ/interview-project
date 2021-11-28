@@ -1,0 +1,52 @@
+
+.inactive {
+    color: red;
+}
+
+.active {
+    color:mediumseagreen;
+}
+
+.table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table td, .table th {
+    border-bottom: 0.3px solid lightgray;
+    padding: 8px;
+}
+  
+.table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #C1C1C1;
+    color: black;
+}
+
+.container {
+    width: 100vh;
+    height: 100vh;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.div1 {
+    width: 200px;
+    height: 100%;
+    background-color: darkgray;
+    display: inline-block;
+}
+
+.div2 {
+    height: 100%;
+    width: 75%;
+    display: inline-block;
+    justify-content: center;
+    vertical-align: top;
+}
