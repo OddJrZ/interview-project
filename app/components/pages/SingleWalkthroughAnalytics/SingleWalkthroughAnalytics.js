@@ -1,8 +1,12 @@
 import React from "react";
 import Table from 'react-bootstrap/Table';
+// there should be a master css in the root folder --> later on when a project gets complex it's easier to change
 import './single.css'
 import { connect } from 'react-redux';
 import { Container } from "react-bootstrap";
+
+// should import data from the json files
+// only time we put the data in directly is adding dummy data to prototype a component
 
 const data = [
     {
@@ -17,6 +21,12 @@ const data = [
         "errors_count": 67
     }
 ]
+
+
+// can put this function within SingleWalkthroughAnalytics component,
+// however if we want to reuse this function for different parts of an app
+// we can create a js file with this function and export it
+// so we can use it anywhere from the application
 
 function rate_percentage(item) {
     item = Math.round(item * 100)
@@ -33,6 +43,9 @@ const SingleWalkthroughAnalytics = () => {
         <div className="div2">
             <h1>Singular Walkthrough Analytics</h1>
             <Table className="table">
+
+            {/* in single_anallytics.json this is actually a single object, not an object of arrays */}
+            {/* hence data.map is not necessary */}
             {data.map((items) => (
                 <tbody>
                     <tr>

@@ -1,8 +1,12 @@
 import React from "react";
 import { connect } from 'react-redux';
 import Table from 'react-bootstrap/Table';
+// there should be a master css in the root folder --> later on when a project gets complex it's easier to change
 import './analytics.css';
 import { Container } from "react-bootstrap";
+
+// should import data from the json files
+// only time we put the data in directly is adding dummy data to prototype a component
 
 const data = [
     {
@@ -67,6 +71,9 @@ const data = [
     }
 ]
 
+// functions that return divs/DOM or components could be treated as React Functional Components
+// so status could be named Status
+
 function status(item) {
     if (item == false) {
         return <td className="inactive">Inactive</td>
@@ -74,7 +81,32 @@ function status(item) {
     else {
         return <td className="active">Live</td>
     }
+
 }
+
+// const Status = ({
+//     item
+// }) => {
+
+//     // should not compare boolean with boolean, because its code redundant
+//     // should be if (!item)
+//     if (item == false) {
+//         return <td className="inactive">Inactive</td>
+//     } 
+//     else {
+//         return <td className="active">Live</td>
+//     }
+
+//     // another way to do if else
+//     // !item ? -> if condition
+//     //  if condition is met : if condition is not met
+//     // <td className="inactive">Inactive</td> : return <td className="active">Live</td>
+
+//     return !item ? 
+//         <td className="inactive">Inactive</td>  // if condition is met
+//         : 
+//         <td className="active">Live</td>        // if condition is not met
+// }
 
 function rate_percentage(item) {
     item = Math.round(item * 100)
@@ -102,6 +134,8 @@ const AnalyticsDashboard = () => {
                     {data.map((items) => (
                         <tr>
                             <td>{items.name}</td>
+                            {/* should be */}
+                            {/* <Status item={items.status} /> */}
                             {status(items.status)}
                             <td>{items.views}</td>
                             <td>{rate_percentage(items.completion_rate)}%</td>
