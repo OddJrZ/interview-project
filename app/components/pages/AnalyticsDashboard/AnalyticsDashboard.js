@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { connect } from 'react-redux';
 import Table from 'react-bootstrap/Table';
 import data from '/data/dashboard.json';
-// there should be a master css in the root folder --> later on when a project gets complex it's easier to change
 import '/app/app.css'
 import { Container } from "react-bootstrap";
 import {rate_percentage} from '../../utils/percentage_utils.js';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -51,11 +51,33 @@ const Status = ({item}) => {
 // }
 
 const AnalyticsDashboard = () => {
-
-    const [dataList, updateData] = useState(data);
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
     
-    const deleteData = name => {
-        updateData(list.filter(items => items.name !== name));
+    const [dataList, updataData] = useState(data);
+
+    const addData = () => {
+        const newDataObj = {
+            name: "test123",
+            status: false,
+            views: 0,
+            completion_rate: 0.0,
+        }
+        const newData = [...dataList, newDataObj];
+        updataData(newData)
+        handleClose();
+    }
+    
+    const deleteData = (index) => {
+        const temp = [...dataList];
+        temp.splice(index, 1);
+        updataData(temp);
     };
 
     return (
@@ -67,11 +89,32 @@ const AnalyticsDashboard = () => {
                 <div className="div4">
                     <h1 className="dashboard">Analytics Dashboard</h1>
                     <h2 className="addrow">Add New Row 
-                    <IconButton><AddCircleIcon>
+                    <IconButton onClick={handleClickOpen}><AddCircleIcon>
                     </AddCircleIcon>
                     </IconButton>
                     </h2>
                 </div>
+
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>Add New Row</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                    Walkthrough Name
+                            </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Enter walkthrough name"
+                                    fullWidth
+                                    variant="standard"
+                                />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={addData}>Next</Button>
+                        </DialogActions>
+                </Dialog>
 
                 <Table className="table">
                     <thead>
@@ -83,15 +126,15 @@ const AnalyticsDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {data.map((items) => (
-                        <tr>
+                    {dataList.map((items, index) => (
+                        <tr key={index}>
                             <td>{items.name}</td>
                             {/* should be */}
                             <Status item={items.status}/>
                             {/* (status(items.status) */}
                             <td>{items.views}</td>
                             <td>{rate_percentage(items.completion_rate)}%</td>
-                            <td><IconButton onClick={ () => deleteData(items.name)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
+                            <td><IconButton onClick={ () => deleteData(index)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
                         </tr>
                         ))}
                     </tbody>
