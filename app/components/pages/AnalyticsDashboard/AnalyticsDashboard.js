@@ -59,18 +59,25 @@ const AnalyticsDashboard = () => {
     const handleClose = () => {
       setOpen(false);
     };
+
+    const [value, setValue] = useState("");
+
+    const handleChange = e => {
+        setValue(e.target.value);
+    }
     
     const [dataList, updataData] = useState(data);
 
     const addData = () => {
         const newDataObj = {
-            name: "test123",
+            name: value,
             status: false,
             views: 0,
             completion_rate: 0.0,
         }
         const newData = [...dataList, newDataObj];
         updataData(newData)
+        setValue("");
         handleClose();
     }
     
@@ -105,9 +112,11 @@ const AnalyticsDashboard = () => {
                                     autoFocus
                                     margin="dense"
                                     id="name"
+                                    value={value}
                                     label="Enter walkthrough name"
                                     fullWidth
                                     variant="standard"
+                                    onChange={handleChange}
                                 />
                         </DialogContent>
                         <DialogActions>
