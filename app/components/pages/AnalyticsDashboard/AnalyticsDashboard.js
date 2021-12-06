@@ -62,7 +62,7 @@ const AnalyticsDashboard = () => {
        setName(items.name);
        setStatus(items.status);
        setViews(items.views);
-       setCompletion(items.completion_rate)
+       setCompletion(rate_percentage(items.completion_rate));
     };
 
     const deleteData = (index) => {
@@ -120,12 +120,12 @@ const AnalyticsDashboard = () => {
                                 label="Name"
                                 fullWidth
                                 variant="standard"
-                                onChange
+                                onChange={ (e) => setName(e.target.value)}
                             />
 
                             <FormGroup>
                                 <FormControlLabel 
-                                control={<Switch defaultChecked={StatusValue} color="success" />} 
+                                control={<Switch defaultChecked={StatusValue} onChange={ () => setStatus(!StatusValue)} color="success" />} 
                                 label="Status" 
                                 labelPlacement="start"
                                 />
@@ -138,17 +138,17 @@ const AnalyticsDashboard = () => {
                                 type="number"
                                 fullWidth
                                 variant="standard"
-                                onChange
+                                onChange={ (e) => setViews(e.target.value)}
                             />
 
                             <TextField
                                 id="completionRate"
                                 label="Completion Rate"
-                                value={rate_percentage(CompletionValue)}
+                                value={CompletionValue}
                                 type="number"
                                 fullWidth
                                 variant="standard"
-                                onChange
+                                onChange={ (e) => setCompletion(e.target.value)}
                                 InputProps={{
                                     endAdornment:
                                     "%"
@@ -158,7 +158,7 @@ const AnalyticsDashboard = () => {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={ () => setOpenEditRow(false)}>Cancel</Button>
-                            <Button onClick={addData}>Next</Button>
+                            <Button onClick={addData}>Save</Button>
                         </DialogActions>
                 </Dialog>
 
