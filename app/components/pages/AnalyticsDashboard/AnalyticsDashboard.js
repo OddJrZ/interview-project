@@ -15,9 +15,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-// functions that return divs/DOM or components could be treated as React Functional Components
-// so status could be named Status
+import EditIcon from '@mui/icons-material/Edit';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 const Status = ({item}) => {
     return !item ? 
@@ -26,46 +27,16 @@ const Status = ({item}) => {
         <td className="active">Live</td>      
 }
 
-// const Status = ({
-//     item
-// }) => {
-
-//     // should not compare boolean with boolean, because its code redundant
-//     // should be if (!item)
-//     if (item == false) {
-//         return <td className="inactive">Inactive</td>
-//     } 
-//     else {
-//         return <td className="active">Live</td>
-//     }
-
-//     // another way to do if else
-//     // !item ? -> if condition
-//     //  if condition is met : if condition is not met
-//     // <td className="inactive">Inactive</td> : return <td className="active">Live</td>
-
-//     return !item ? 
-//         <td className="inactive">Inactive</td>  // if condition is met
-//         : 
-//         <td className="active">Live</td>        // if condition is not met
-// }
-
 const AnalyticsDashboard = () => {
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
+    const [openAddRow, setOpenAddRow] = useState(false);
+    const [openEditRow, setOpenEditRow] = useState(false);
 
     const [value, setValue] = useState("");
 
     const handleChange = e => {
         setValue(e.target.value);
     }
-    
+
     const [dataList, updataData] = useState(data);
 
     const addData = () => {
@@ -78,9 +49,22 @@ const AnalyticsDashboard = () => {
         const newData = [...dataList, newDataObj];
         updataData(newData)
         setValue("");
-        handleClose();
-    }
-    
+        setOpenAddRow(false);
+    };
+
+    const [NameValue, setName] = useState(null);
+    const [StatusValue, setStatus] = useState(null);
+    const [ViewsValue, setViews] = useState(null);
+    const [CompletionValue, setCompletion] = useState(null);
+
+    const displayEditData = (items) => {
+       setOpenEditRow(true);
+       setName(items.name);
+       setStatus(items.status);
+       setViews(items.views);
+       setCompletion(items.completion_rate)
+    };
+
     const deleteData = (index) => {
         const temp = [...dataList];
         temp.splice(index, 1);
@@ -96,13 +80,13 @@ const AnalyticsDashboard = () => {
                 <div className="div4">
                     <h1 className="dashboard">Analytics Dashboard</h1>
                     <h2 className="addrow">Add New Row 
-                    <IconButton onClick={handleClickOpen}><AddCircleIcon>
+                    <IconButton onClick={ () => setOpenAddRow(true)}><AddCircleIcon>
                     </AddCircleIcon>
                     </IconButton>
                     </h2>
                 </div>
 
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog open={openAddRow} onClose={ () => setOpenAddRow(false)}>
                     <DialogTitle>Add New Row</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
@@ -120,7 +104,60 @@ const AnalyticsDashboard = () => {
                                 />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleClose}>Cancel</Button>
+                            <Button onClick={ () => setOpenAddRow(false)}>Cancel</Button>
+                            <Button onClick={addData}>Next</Button>
+                        </DialogActions>
+                </Dialog>
+
+                <Dialog open={openEditRow} onClose={ () => setOpenEditRow(false)}>
+                    <DialogTitle>Edit Row Data</DialogTitle>
+                        <DialogContent>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="name"
+                                value={NameValue}
+                                label="Name"
+                                fullWidth
+                                variant="standard"
+                                onChange
+                            />
+
+                            <FormGroup>
+                                <FormControlLabel 
+                                control={<Switch defaultChecked={StatusValue} color="success" />} 
+                                label="Status" 
+                                labelPlacement="start"
+                                />
+                            </FormGroup>
+
+                            <TextField
+                                id="views"
+                                label="No. of views"
+                                value={ViewsValue}
+                                type="number"
+                                fullWidth
+                                variant="standard"
+                                onChange
+                            />
+
+                            <TextField
+                                id="completionRate"
+                                label="Completion Rate"
+                                value={rate_percentage(CompletionValue)}
+                                type="number"
+                                fullWidth
+                                variant="standard"
+                                onChange
+                                InputProps={{
+                                    endAdornment:
+                                    "%"
+                                }}
+                            />
+
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={ () => setOpenEditRow(false)}>Cancel</Button>
                             <Button onClick={addData}>Next</Button>
                         </DialogActions>
                 </Dialog>
@@ -131,7 +168,7 @@ const AnalyticsDashboard = () => {
                             <th>Walkthrough Name</th>
                             <th>Status</th>
                             <th>No. of views</th>
-                            <th colSpan={2}>Completion Rate</th>
+                            <th colSpan={3}>Completion Rate</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -143,6 +180,7 @@ const AnalyticsDashboard = () => {
                             {/* (status(items.status) */}
                             <td>{items.views}</td>
                             <td>{rate_percentage(items.completion_rate)}%</td>
+                            <td><IconButton onClick={ () => displayEditData(items)}><EditIcon></EditIcon></IconButton></td>
                             <td><IconButton onClick={ () => deleteData(index)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
                         </tr>
                         ))}
