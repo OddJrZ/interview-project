@@ -52,8 +52,12 @@ const AnalyticsDashboard = () => {
         setOpenAddRow(false);
     };
 
+    // name, setName
     const [NameValue, setName] = useState(null);
+    
+    //status, setStatus
     const [StatusValue, setStatus] = useState(null);
+
     const [ViewsValue, setViews] = useState(null);
     const [CompletionValue, setCompletion] = useState(null);
 
@@ -86,6 +90,7 @@ const AnalyticsDashboard = () => {
                     </h2>
                 </div>
 
+                {/* TODO: create a component for this dialog */}
                 <Dialog open={openAddRow} onClose={ () => setOpenAddRow(false)}>
                     <DialogTitle>Add New Row</DialogTitle>
                         <DialogContent>
@@ -109,6 +114,7 @@ const AnalyticsDashboard = () => {
                         </DialogActions>
                 </Dialog>
 
+                {/* TODO: create a component for this dialog */}
                 <Dialog open={openEditRow} onClose={ () => setOpenEditRow(false)}>
                     <DialogTitle>Edit Row Data</DialogTitle>
                         <DialogContent>
@@ -172,17 +178,18 @@ const AnalyticsDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {dataList.map((items, index) => (
-                        <tr key={index}>
-                            <td>{items.name}</td>
-                            {/* should be */}
-                            <Status item={items.status}/>
-                            {/* (status(items.status) */}
-                            <td>{items.views}</td>
-                            <td>{rate_percentage(items.completion_rate)}%</td>
-                            <td><IconButton onClick={ () => displayEditData(items)}><EditIcon></EditIcon></IconButton></td>
-                            <td><IconButton onClick={ () => deleteData(index)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
-                        </tr>
+                        {dataList.map((items, index) => (
+                            // {/* TODO: create a component for the single rows */}
+                            <tr key={index}>
+                                <td>{items.name}</td>
+                                {/* should be */}
+                                <Status item={items.status}/>
+                                {/* (status(items.status) */}
+                                <td>{items.views}</td>
+                                <td>{rate_percentage(items.completion_rate)}%</td>
+                                <td><IconButton onClick={ () => displayEditData(items)}><EditIcon></EditIcon></IconButton></td>
+                                <td><IconButton onClick={ () => deleteData(index)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
+                            </tr>
                         ))}
                     </tbody>
                 </Table>
