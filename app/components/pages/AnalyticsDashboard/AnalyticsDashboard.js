@@ -4,28 +4,11 @@ import Table from 'react-bootstrap/Table';
 import data from '/data/dashboard.json';
 import '/app/app.css'
 import { Container } from "react-bootstrap";
-import {rate_percentage} from '../../utils/percentage_utils.js';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-
-const Status = ({item}) => {
-    return !item ? 
-        <td className="inactive">Inactive</td>  
-        : 
-        <td className="active">Live</td>      
-}
+import DataListRows from "../../component/DataListRows.js";
+import DialogAddRow from "../../component/DialogAddRow.js";
+import DialogEdit from "../../component/DialogEdit.js";
 
 const AnalyticsDashboard = () => {
     const [openAddRow, setOpenAddRow] = useState(false);
@@ -60,13 +43,28 @@ const AnalyticsDashboard = () => {
 
     const [ViewsValue, setViews] = useState(null);
     const [CompletionValue, setCompletion] = useState(null);
+    const [indexValue, setIndex] = useState(null);
 
-    const displayEditData = (items) => {
+    const displayEditData = (items, index) => {
        setOpenEditRow(true);
        setName(items.name);
        setStatus(items.status);
        setViews(items.views);
-       setCompletion(rate_percentage(items.completion_rate));
+       setCompletion(items.completion_rate);
+       setIndex(index);
+    };
+
+    const updateEditedData = () => {
+        const newDataObj = {
+            name: NameValue,
+            status: StatusValue,
+            views: ViewsValue,
+            completion_rate: CompletionValue,
+        }
+        const newData = [...dataList];
+        newData[indexValue] = newDataObj;
+        updataData(newData)
+        setOpenEditRow(false);
     };
 
     const deleteData = (index) => {
@@ -90,83 +88,26 @@ const AnalyticsDashboard = () => {
                     </h2>
                 </div>
 
-                {/* TODO: create a component for this dialog */}
-                <Dialog open={openAddRow} onClose={ () => setOpenAddRow(false)}>
-                    <DialogTitle>Add New Row</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText>
-                                    Walkthrough Name
-                            </DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="name"
-                                    value={value}
-                                    label="Enter walkthrough name"
-                                    fullWidth
-                                    variant="standard"
-                                    onChange={handleChange}
-                                />
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={ () => setOpenAddRow(false)}>Cancel</Button>
-                            <Button onClick={addData}>Next</Button>
-                        </DialogActions>
-                </Dialog>
+                <DialogAddRow 
+                    openAddRow={openAddRow}
+                    onClose = {() => setOpenAddRow(false)}
+                    addData = {addData}
+                    handleChange = {handleChange}
+                />
 
-                {/* TODO: create a component for this dialog */}
-                <Dialog open={openEditRow} onClose={ () => setOpenEditRow(false)}>
-                    <DialogTitle>Edit Row Data</DialogTitle>
-                        <DialogContent>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="name"
-                                value={NameValue}
-                                label="Name"
-                                fullWidth
-                                variant="standard"
-                                onChange={ (e) => setName(e.target.value)}
-                            />
-
-                            <FormGroup>
-                                <FormControlLabel 
-                                control={<Switch defaultChecked={StatusValue} onChange={ () => setStatus(!StatusValue)} color="success" />} 
-                                label="Status" 
-                                labelPlacement="start"
-                                />
-                            </FormGroup>
-
-                            <TextField
-                                id="views"
-                                label="No. of views"
-                                value={ViewsValue}
-                                type="number"
-                                fullWidth
-                                variant="standard"
-                                onChange={ (e) => setViews(e.target.value)}
-                            />
-
-                            <TextField
-                                id="completionRate"
-                                label="Completion Rate"
-                                value={CompletionValue}
-                                type="number"
-                                fullWidth
-                                variant="standard"
-                                onChange={ (e) => setCompletion(e.target.value)}
-                                InputProps={{
-                                    endAdornment:
-                                    "%"
-                                }}
-                            />
-
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={ () => setOpenEditRow(false)}>Cancel</Button>
-                            <Button onClick={addData}>Save</Button>
-                        </DialogActions>
-                </Dialog>
+                <DialogEdit 
+                    openEditRow={openEditRow}
+                    onClose = { () => setOpenEditRow(false)}
+                    updateEditedData = {updateEditedData}
+                    NameValue = {NameValue}
+                    setName = {setName}
+                    StatusValue = {StatusValue}
+                    setStatus = {setStatus}
+                    ViewsValue = {ViewsValue}
+                    setViews = {setViews}
+                    CompletionValue = {CompletionValue}
+                    setCompletion = {setCompletion}
+                />
 
                 <Table className="table">
                     <thead>
@@ -178,19 +119,14 @@ const AnalyticsDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {dataList.map((items, index) => (
-                            // {/* TODO: create a component for the single rows */}
-                            <tr key={index}>
-                                <td>{items.name}</td>
-                                {/* should be */}
-                                <Status item={items.status}/>
-                                {/* (status(items.status) */}
-                                <td>{items.views}</td>
-                                <td>{rate_percentage(items.completion_rate)}%</td>
-                                <td><IconButton onClick={ () => displayEditData(items)}><EditIcon></EditIcon></IconButton></td>
-                                <td><IconButton onClick={ () => deleteData(index)}><DeleteIcon className="deleteicon"></DeleteIcon></IconButton></td>
-                            </tr>
-                        ))}
+                    {dataList.map((items, index) => (
+                        <DataListRows 
+                            index={index}
+                            items={items}
+                            deleteData={deleteData}
+                            displayEditData={displayEditData}
+                        />
+                    ))}
                     </tbody>
                 </Table>
             </div>
