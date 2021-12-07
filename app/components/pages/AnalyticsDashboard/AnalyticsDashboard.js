@@ -22,10 +22,10 @@ const AnalyticsDashboard = () => {
         setValue(e.target.value);
     }
 
-    // displaying data rows
+    // displaying data list
     const [dataList, setData] = useState(data);
 
-    // adding data
+    // adding data into list
     const addData = () => {
         const newDataObj = {
             name: value,
