@@ -11,17 +11,21 @@ import DialogAddRow from "../../component/DialogAddRow.js";
 import DialogEdit from "../../component/DialogEdit.js";
 
 const AnalyticsDashboard = () => {
+    // opening add row modal
     const [openAddRow, setOpenAddRow] = useState(false);
+
+    // opening edit modal
     const [openEditRow, setOpenEditRow] = useState(false);
 
     const [value, setValue] = useState("");
-
     const handleChange = e => {
         setValue(e.target.value);
     }
 
-    const [dataList, updataData] = useState(data);
+    // displaying data rows
+    const [dataList, setData] = useState(data);
 
+    // adding data
     const addData = () => {
         const newDataObj = {
             name: value,
@@ -30,21 +34,19 @@ const AnalyticsDashboard = () => {
             completion_rate: 0.0,
         }
         const newData = [...dataList, newDataObj];
-        updataData(newData)
+        setData(newData)
         setValue("");
         setOpenAddRow(false);
     };
 
     // name, setName
-    const [NameValue, setName] = useState(null);
-    
-    //status, setStatus
-    const [StatusValue, setStatus] = useState(null);
+    const [name, setName] = useState(null);
+    const [status, setStatus] = useState(null);
+    const [views, setViews] = useState(null);
+    const [completion, setCompletion] = useState(null);
+    const [index, setIndex] = useState(null);
 
-    const [ViewsValue, setViews] = useState(null);
-    const [CompletionValue, setCompletion] = useState(null);
-    const [indexValue, setIndex] = useState(null);
-
+    // displaying edit modal 
     const displayEditData = (items, index) => {
        setOpenEditRow(true);
        setName(items.name);
@@ -54,23 +56,25 @@ const AnalyticsDashboard = () => {
        setIndex(index);
     };
 
+    //updating edited data
     const updateEditedData = () => {
         const newDataObj = {
-            name: NameValue,
-            status: StatusValue,
-            views: ViewsValue,
-            completion_rate: CompletionValue,
+            name: name,
+            status: status,
+            views: views,
+            completion_rate: completion,
         }
         const newData = [...dataList];
-        newData[indexValue] = newDataObj;
-        updataData(newData)
+        newData[index] = newDataObj;
+        setData(newData)
         setOpenEditRow(false);
     };
 
+    // deleting data
     const deleteData = (index) => {
         const temp = [...dataList];
         temp.splice(index, 1);
-        updataData(temp);
+        setData(temp);
     };
 
     return (
@@ -88,6 +92,7 @@ const AnalyticsDashboard = () => {
                     </h2>
                 </div>
 
+                {/* Adding Data Rows */}
                 <DialogAddRow 
                     openAddRow={openAddRow}
                     onClose = {() => setOpenAddRow(false)}
@@ -95,17 +100,18 @@ const AnalyticsDashboard = () => {
                     handleChange = {handleChange}
                 />
 
+                {/* Editing Data Rows */}
                 <DialogEdit 
                     openEditRow={openEditRow}
                     onClose = { () => setOpenEditRow(false)}
                     updateEditedData = {updateEditedData}
-                    NameValue = {NameValue}
+                    NameValue = {name}
                     setName = {setName}
-                    StatusValue = {StatusValue}
+                    StatusValue = {status}
                     setStatus = {setStatus}
-                    ViewsValue = {ViewsValue}
+                    ViewsValue = {views}
                     setViews = {setViews}
-                    CompletionValue = {CompletionValue}
+                    CompletionValue = {completion}
                     setCompletion = {setCompletion}
                 />
 
@@ -118,6 +124,8 @@ const AnalyticsDashboard = () => {
                             <th colSpan={3}>Completion Rate</th>
                         </tr>
                     </thead>
+
+                    {/* Listing Data Rows */}
                     <tbody>
                     {dataList.map((items, index) => (
                         <DataListRows 
