@@ -101,6 +101,8 @@ const AnalyticsDashboard = () => {
                 />
 
                 {/* Editing Data Rows */}
+
+                {/* make sure that props do not have the first letter capitalized as well */}
                 <DialogEdit 
                     openEditRow={openEditRow}
                     onClose = { () => setOpenEditRow(false)}

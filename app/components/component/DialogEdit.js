@@ -9,6 +9,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+// ensure that all non-react component/classes do not have capitalized letters at the start
 const DialogEdit = ({
     openEditRow,
     onClose,
