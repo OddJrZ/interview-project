@@ -10,7 +10,7 @@ import DataListRows from "../../component/DataListRows.js";
 import DialogAddRow from "../../component/DialogAddRow.js";
 import DialogEdit from "../../component/DialogEdit.js";
 
-const AnalyticsDashboard = () => {
+const AnalyticsDashboard = ({ dataStore }) => {
     // opening add row modal
     const [openAddRow, setOpenAddRow] = useState(false);
 
@@ -23,8 +23,8 @@ const AnalyticsDashboard = () => {
     }
 
     // displaying data list
-    const dataListStore = useSelector(state => state.dataStore)
-    const [dataList, setData] = useState(dataListStore);
+    // 2nd const dataListStore = useSelector(state => state.dataStore);
+    const [dataList, setData] = useState(dataStore);
 
     // adding data into list
     const addData = () => {
@@ -147,7 +147,7 @@ const AnalyticsDashboard = () => {
 
 const mapStateToProps = state => {
     return {
-        dataTest: state.dataTest
+        dataStore: state.dataStore
     };
 };
 
