@@ -4,17 +4,9 @@ import App from './components/App.jsx'
 import {Provider} from 'react-redux';
 import { createStore } from 'redux'
 import { BrowserRouter as Router } from 'react-router-dom';
+import allReducers from './reducers';
 
-function data(state = [], action) {
-    switch (action.type) {
-      case 'ADD_TODO':
-        return state.concat([action.text])
-      default:
-        return state
-    }
-}
-
-const store = createStore(data, ["INIT"])
+const store = createStore(allReducers);
 
 render(
     <Provider store={store}>

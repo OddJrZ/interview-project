@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Table from 'react-bootstrap/Table';
 import data from '/data/dashboard.json';
 import '/app/app.css'
@@ -23,7 +23,8 @@ const AnalyticsDashboard = () => {
     }
 
     // displaying data list
-    const [dataList, setData] = useState(data);
+    const dataListStore = useSelector(state => state.dataStore)
+    const [dataList, setData] = useState(dataListStore);
 
     // adding data into list
     const addData = () => {
@@ -107,13 +108,13 @@ const AnalyticsDashboard = () => {
                     openEditRow={openEditRow}
                     onClose = { () => setOpenEditRow(false)}
                     updateEditedData = {updateEditedData}
-                    NameValue = {name}
+                    name = {name}
                     setName = {setName}
-                    StatusValue = {status}
+                    status = {status}
                     setStatus = {setStatus}
-                    ViewsValue = {views}
+                    views = {views}
                     setViews = {setViews}
-                    CompletionValue = {completion}
+                    completion = {completion}
                     setCompletion = {setCompletion}
                 />
 
@@ -145,7 +146,9 @@ const AnalyticsDashboard = () => {
 };
 
 const mapStateToProps = state => {
-
+    return {
+        dataTest: state.dataTest
+    };
 };
 
-export default connect()(AnalyticsDashboard);
+export default connect(mapStateToProps)(AnalyticsDashboard);

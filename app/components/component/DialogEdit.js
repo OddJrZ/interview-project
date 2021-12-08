@@ -14,13 +14,13 @@ const DialogEdit = ({
     openEditRow,
     onClose,
     updateEditedData,
-    NameValue,
+    name,
     setName,
-    StatusValue,
+    status,
     setStatus,
-    ViewsValue,
+    views,
     setViews,
-    CompletionValue,
+    completion,
     setCompletion,
 }) => {
     return (
@@ -31,7 +31,7 @@ const DialogEdit = ({
                     autoFocus
                     margin="dense"
                     id="name"
-                    value={NameValue}
+                    value={name}
                     label="Name"
                     fullWidth
                     variant="standard"
@@ -40,7 +40,7 @@ const DialogEdit = ({
 
                 <FormGroup>
                     <FormControlLabel 
-                    control={<Switch defaultChecked={StatusValue} onChange={ () => setStatus(!StatusValue)} color="success" />} 
+                    control={<Switch defaultChecked={status} onChange={ () => setStatus(!status)} color="success" />} 
                     label="Status" 
                     labelPlacement="start"
                     />
@@ -49,7 +49,7 @@ const DialogEdit = ({
                 <TextField
                     id="views"
                     label="No. of views"
-                    value={ViewsValue}
+                    value={views}
                     type="number"
                     fullWidth
                     variant="standard"
@@ -59,7 +59,7 @@ const DialogEdit = ({
                 <TextField
                     id="completionRate"
                     label="Completion Rate"
-                    value={CompletionValue}
+                    value={completion}
                     type="number"
                     fullWidth
                     variant="standard"
